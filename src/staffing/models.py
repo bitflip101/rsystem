@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from core_org.models import OrgUnit
 
 class Department(models.Model):
     name = models.CharField(max_length=100) # e.g., "Exploration, Reservoir"
@@ -18,7 +19,7 @@ class Position(models.Model):
     title = models.CharField(max_length=100) # e.g., "Offshore Drilling Manager"
     org_unit = models.ForeignKey(OrgUnit, on_delete=models.CASCADE, related_name='positions')
     reports_to = models.ForeignKey('self', on_delete=models.SET_NULL, null=True)
-    rank_level = models.IntegerFiel(choices=RANK_CHOICES)
+    rank_level = models.IntegerField(choices=RANK_CHOICES)
 
     # THishelps find the "HEAD" fo a unit automatically
     is_unit_head = models.BooleanField(default=False)

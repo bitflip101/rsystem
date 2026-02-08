@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R-System | O&G Asset Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
+    <style>
+        :root { --rsystem-navy: #0a192f; --rsystem-accent: #17a2b8; }
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .sidebar { background: var(--rsystem-navy); min-height: 100vh; color: white; width: 250px; position: fixed; }
+        .main-content { margin-left: 250px; padding: 20px; }
+        .nav-link { color: #adb5bd; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: white; background: rgba(255,255,255,0.1); }
+        .asset-indicator { font-weight: bold; color: var(--rsystem-accent); }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <nav class="sidebar p-3 d-none d-md-block">
+            <h4 class="text-center py-3 border-bottom border-secondary">R-SYSTEM</h4>
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item"><a href="{% url 'portal:home' %}" class="nav-link active"><i class="fas fa-chart-line me-2"></i> Dashboard</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-oil-can me-2"></i> Well Assets</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-sitemap me-2"></i> Org Structure</a></li>
+                {% if user.is_staff %}
+                <li class="nav-item mt-4"><small class="text-uppercase text-secondary">Admin</small></li>
+                <li class="nav-item"><a href="/admin" class="nav-link text-warning"><i class="fas fa-user-shield me-2"></i> Support Panel</a></li>
+                {% endif %}
+            </ul>
+            <div class="mt-auto p-3 border-top border-secondary">
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link nav-link text-danger w-100 text-start p-0">
+                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </nav>
+
+        <div class="main-content w-100">
+            <header class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                <div>
+                    {% if user.is_authenticated %}
+                    <span class="text-muted">Active Asset:</span> <span class="asset-indicator">{{ user.employee.position.org_unit.asset.name }}</span>
+                    {% endif %}
+                </div>
+                <!-- <div class="d-flex align-items-center">
+                    <div class="me-3 position-relative">
+                        <i class="fas fa-bell fs-5 text-secondary"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                    </div>
+                    <span class="me-2">{{ user.username }}</span>
+                    <i class="fas fa-user-circle fs-4 text-secondary"></i>
+                </div> -->
+                <div class="d-flex align-items-center">
+                    <div class="me-3 position-relative">
+                    <i class="fas fa-bell fs-5 text-secondary"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                    </div>
+
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle text-dark" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="me-2">{{ user.username }}</span>
+                        <i class="fas fa-user-circle fs-4 text-secondary"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userDropdown">
+                            <li><h6 class="dropdown-header">Session Settings</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" class="px-2">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item rounded text-danger">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

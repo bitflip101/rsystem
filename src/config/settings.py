@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Custom Apps
+    'portal',
     'core_org',
     'staffing',
     'well_assets',
@@ -48,7 +49,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -61,10 +62,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -114,3 +111,21 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# CELERY Settings (or..TODO: create a celery.py file and call it from here)
+CELERY_BEAT_SCHEDULE = {
+    'check-deadlines-every-hour': {
+        'task': 'notification.tasks.process_project_reminders',
+        'schedule': 3600.0, # every 60 mins.
+    }
+}
+
+# Redirect users after successful login
+LOGIN_REDIRECT_URL = 'portal:home'
+
+# Redirect users after successful logout
+LOGOUT_REDIRECT_URL = 'portal:home'
+
+# The URL where the login page lives(used by the @login_required decorator)
+LOGIN_URL = 'login'

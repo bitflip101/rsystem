@@ -1,0 +1,80 @@
+{% extends 'portal/base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    {% if not user.is_authenticated %}
+    <div class="bg-white p-5 rounded-4 shadow-sm text-center">
+        <h1 class="display-4 fw-bold text-navy">Welcome to R-System</h1>
+        <p class="lead text-muted">A Generwell-inspired platform for lifecycle management in the Oil & Gas industry.</p>
+        <hr class="my-4 w-25 mx-auto">
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <i class="fas fa-route fa-3x text-info mb-3"></i>
+                <h5>Smart Routing</h5>
+                <p class="small text-muted">Automated approval workflows based on organizational hierarchy.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-clock fa-3x text-info mb-3"></i>
+                <h5>Real-time Alerts</h5>
+                <p class="small text-muted">Never miss a deadline with automated escalation and reminders.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-shield-alt fa-3x text-info mb-3"></i>
+                <h5>Full Audit Trail</h5>
+                <p class="small text-muted">Every decision and data change is logged for compliance.</p>
+            </div>
+        </div>
+        <a href="{% url 'login' %}" class="btn btn-primary btn-lg mt-4 px-5 shadow">Employee Login</a>
+    </div>
+
+    {% else %}
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm p-3 border-start border-4 border-danger">
+                <small class="text-uppercase fw-bold text-muted">My Action Items</small>
+                <h2 class="mb-0">{{ pending_count }}</h2>
+                <a href="#" class="small text-danger text-decoration-none">View Work Queue &rarr;</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm p-3 border-start border-4 border-primary">
+                <small class="text-uppercase fw-bold text-muted">Asset Wells</small>
+                <h2 class="mb-0">142</h2>
+                <span class="small text-muted">North Asset Region</span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Priority Action Queue</h5>
+                    <button class="btn btn-sm btn-outline-secondary">View All</button>
+                </div>
+                <div class="table-responsive px-3">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Well Name</th>
+                                <th>Stage</th>
+                                <th>Due Date</th>
+                                <th>Priority</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Well Alpha-12</strong></td>
+                                <td><span class="badge bg-info">Drilling</span></td>
+                                <td class="text-danger fw-bold">Oct 25 (Overdue)</td>
+                                <td><span class="text-danger"><i class="fas fa-fire"></i> High</span></td>
+                                <td><button class="btn btn-sm btn-primary">Review</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

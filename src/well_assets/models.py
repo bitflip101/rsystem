@@ -10,8 +10,8 @@ class Well(models.Model):
     well_name = models.CharField(max_length=100)
     asset = models.ForeignKey(Asset, on_delete=models.PROTECT)
     field_name = models.CharField(max_length=100)
-    latitude = models.DecimalField(max_length=9, decimal_places=6)
-    longitude = models.DecimalField(max_length=9, decimal_places=6)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
 
     def __str__(self):
         return f"{self.well_name} ({self.uwi})"
