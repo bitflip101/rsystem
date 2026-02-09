@@ -24,12 +24,12 @@ class WellProject(models.Model):
         ('DRILL', 'Drilling'),
         ('COMPLETE', 'Completion'),
         ('PROD', 'Production'),
-        ('ABANDON', 'Abandoned'),
+        ('ABANDON', 'Abandonment'),
     ]
 
     STATUS_CHOICES = [
         ('DRAFT', 'Draft'),
-        ('APPROVED', 'in Review/Approval'),
+        ('REVIEW', 'In Review/Approval'),
         ('APPROVED', 'Approved/Active'),
         ('ON_HOLD', 'On Hold'),
         ('CLOSED', 'Completed/Closed'),
