@@ -10,4 +10,6 @@ urlpatterns = [
     # This line adds login, logout, password reset, etc.,
     # It also automatically looks for templates in a folder named 'registration'
     path('accounts/', include('django.contrib.auth.urls')),
+
+    path('org/', include('core_org.urls')),
 ]
