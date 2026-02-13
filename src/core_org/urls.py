@@ -10,4 +10,13 @@ urlpatterns = [
     path('unit/<int:pk>/edit/', views.unit_edit, name='unit-edit'),
     path('unit/<int:pk>/staff', views.unit_staff_list, name='unit-staff'),
     # path('asset/<int:pk>/edit/', views.asset_edit, name='asset-edit'),
+
+    ## The Drill-down routes
+    path('explorer/', views.org_explorer, name = 'explorer'),
+    path('explorer/asset/<int:asset_id>/', views.org_explorer, name='explorer-asset'),
+    path('explorer/unit/<int:unit_id>/', views.org_explorer, name='explorer-unit'),
+
+    ## The 'Add' routes created.
+    path('asset/new/', views.asset_create, name='asset-create'),
+    path('asset/<int:asset_id>/unit/add/', views.unit_add_to_asset, name='unit-add-to-asset'),
 ]

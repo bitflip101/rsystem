@@ -40,6 +40,7 @@ def unit_add_to_asset(request, asset_id):
             unit.asset = asset # Force the asset to be the one we clicked on
             unit.save()
             return redirect('core_org:dashboard')
+
     else:
         ## Pre-fill the asset in the form
         form = OrgUnitForm(initial={'asset': asset})
@@ -65,3 +66,47 @@ def unit_staff_list(request, pk):
     tn = "core_org/unit_staff.html"
     context = {'unit': unit, 'staff': staff}
     return render (request, tn ,context)
+
+def org_explorer(request, asset_id=None, unit_id=None):
+    context = {
+        'current_asset': None,
+        'current_unit': None,
+        'breadcrumbs': [],
+        'items': [], 
+        'next_type': 'Asset',
+    }
+
+    ## Level 1: List all Assets
+    if not asset_id and not unit_id:
+        context['items'] = Asset.objects.all()
+        context['next_type'] = 'Asset'
+        context['title'] = "Regional Assets"
+    
+    ## Level 2: List Top-Level Units for an Asset (e.g., Corporate/Exex)
+    elif asset_id and not unit_id:
+        asset = get_object_or_404(Asset, id=asset_id)
+        context['current_asset'] = asset
+        context['items'] = OrgUnit.objects.filter(asset=asset, parent__isnull=True)
+        context['next_type'] = 'Corporate/Executive Unit'
+        context['breadcrumbs'] = [{'name': asset.get_name_display(), 'url': None}]
+        context['title'] = f"Units in {asset.get_name_display()}"
+    ## Level 3: List Sub-Units for a Parent Unit (Dept -> Div -> Group)
+    elif unit_id:
+        unit = get_object_or_404(OrgUnit, id=unit_id)
+        context['current_unit'] = unit
+        context['current_asset'] = unit.asset
+        context['items'] = unit.sub_units.all()
+        context['next_type'] = 'Sub-Unit'
+
+        ## Build Breadcrumbs by recursing upwards
+        crumbs = []
+        curr = unit
+        while curr:
+            crumbs.insert(0, {'name': curr.name, 'id': curr.id})
+            curr = curr.parent
+        ## Add the Asset at the very start
+        crumbs.insert(0, {'name': unit.asset.get_name_display(), 'asset_id': unit.asset.id})
+        context['breadcrumbs'] = crumbs
+        context['title'] = f"Inside {unit.name}"
+    tn = "core_org/org_explorer.html"
+    return render(request, tn, context)

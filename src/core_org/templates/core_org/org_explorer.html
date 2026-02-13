@@ -1,0 +1,64 @@
+{% extends 'portal/base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb bg-white p-3 shadow-sm rounded">
+            <li class="breadcrumb-item"><a href="{% url 'core_org:explorer' %}">All Assets</a></li>
+            {% for crumb in breadcrumbs %}
+                {% if crumb.asset_id %}
+                    <li class="breadcrumb-item"><a href="{% url 'core_org:explorer-asset' crumb.asset_id %}">{{ crumb.name }}</a></li>
+                {% elif crumb.id %}
+                    <li class="breadcrumb-item"><a href="{% url 'core_org:explorer-unit' crumb.id %}">{{ crumb.name }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>{{ title }}</h3>
+        {% if not current_asset %}
+            <a href="{% url 'core_org:asset-create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add New Asset</a>
+        {% elif current_asset %}
+            <a href="{% url 'core_org:unit-add-to-asset' current_asset.id %}" class="btn btn-success"><i class="fas fa-plus"></i> Add {{ next_type }}</a>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        {% for item in items %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 border-0 border-top border-4 border-primary">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        {% if not current_asset %}
+                            <i class="fas fa-globe-americas fa-3x text-info"></i>
+                        {% else %}
+                            <i class="fas fa-folder fa-3x text-warning"></i>
+                        {% endif %}
+                    </div>
+                    <h5 class="card-title">{{ item.name }}{{ item.get_name_display }}</h5>
+                    {% if item.code %}<p class="badge bg-light text-dark border">{{ item.code }}</p>{% endif %}
+                    
+                    <div class="mt-3">
+                        {% if not current_asset %}
+                            <a href="{% url 'core_org:explorer-asset' item.id %}" class="btn btn-outline-primary btn-sm">Explore Units</a>
+                        {% else %}
+                            <a href="{% url 'core_org:explorer-unit' item.id %}" class="btn btn-outline-primary btn-sm">View Sub-Units</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-around">
+                    <a href="{% url 'core_org:unit-edit' item.id %}" class="text-primary"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'core_org:unit-staff' item.id %}" class="text-secondary"><i class="fas fa-users"></i></a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">No units found at this level.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
