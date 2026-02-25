@@ -5,6 +5,8 @@ class Asset(models.Model):
         ('NORTH', 'North Asset'),
         ('SOUTH', 'South Asset'),
         ('EAST', 'East Asset'),
+        ('WEST', 'West Asset'),
+        ('NORTHEAST', 'NorhtEast Asset'),
     ]
     name = models.CharField(max_length=50, choices=REGION_CHOICES, unique=True)
     description = models.TextField(blank=True)

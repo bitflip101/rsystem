@@ -36,7 +36,7 @@
                             <i class="fas fa-folder fa-3x text-warning"></i>
                         {% endif %}
                     </div>
-                    <h5 class="card-title">{{ item.name }}{{ item.get_name_display }}</h5>
+                    <h5 class="card-title">{{ item.name }} {## {{ item.get_name_display }} ##}</h5>
                     {% if item.code %}<p class="badge bg-light text-dark border">{{ item.code }}</p>{% endif %}
                     
                     <div class="mt-3">
